@@ -2,4 +2,5 @@
 __pycache__
 nohup.out
 test.py
-.dstack
+.dstack"venv/" 
+"__pycache__/" 

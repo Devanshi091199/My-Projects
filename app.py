@@ -28,9 +28,15 @@ from pingpong.gradio import GradioStarChatPPManager
 from pingpong.gradio import GradioMPTChatPPManager
 from pingpong.gradio import GradioRedPajamaChatPPManager
 from pingpong.gradio import GradioBaizeChatPPManager
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+import gradio as gr
 
 # no cpu for 
 # - falcon families (too slow)
+
+
+
 
 load_mode_list = ["cpu"]
 
@@ -578,7 +584,7 @@ def gradio_main(args):
             with gr.Row(elem_id="landing-container-selection"):
                 with gr.Column():
                     gr.Markdown(
-                        "This is the landing page of the project, [LLM As Chatbot](https://github.com/deep-diver/LLM-As-Chatbot). "
+                        "This is the landing page of the project, [LLM As Chatbot](https://github.com/Devanshi091199/LLM-As-Chatbot). "
                         "This appliction is designed for personal use only. A single model will be selected at a time even if you "
                         "open up a new browser or a tab. As an initial choice, please select one of the following menu"
                     )
@@ -598,8 +604,8 @@ def gradio_main(args):
 
                     with gr.Column(elem_id="landing-bottom"):
                         progress_view0 = gr.Textbox(label="Progress", elem_classes=["progress-view"])
-                        gr.Markdown("""[project](https://github.com/deep-diver/LLM-As-Chatbot)
-    [developer](https://github.com/deep-diver)
+                        gr.Markdown("""[project](https://github.com/Devanshi091199/LLM-As-Chatbot)
+    [developer](https://github.com/Devanshi091199)
     """, elem_classes=["center"])
     
         with gr.Column(visible=False, elem_id="model-selection-container") as model_choice_view:
@@ -617,7 +623,7 @@ def gradio_main(args):
                             "This view organizes the list of models based on [🤗 Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard). "
                             "Not all models are evaluated on the leader board, so those models' score is indicated with the value `-1`. Also, this application does not "
                             "come with all the open source LLMs on the leader board as well. That is because the actual functionalities are not fully tested, so if you "
-                            "want to add more models in this application, please write an [issue](https://github.com/deep-diver/LLM-As-Chatbot/issues) for that."
+                            "want to add more models in this application, please write an [issue](https://github.com/Devanshi091199/LLM-As-Chatbot/issues) for that."
                         )
                         gr.Markdown(
                             "If you are curious how the models are evaluated and what each score categories are, please find them on [🤗 Open LLM Leaderboard]"
@@ -625,18 +631,17 @@ def gradio_main(args):
                             "(https://arxiv.org/abs/1803.05457), [HellaSwag](https://arxiv.org/abs/1905.07830), [MMLU(Measuring Massive Multitask Language Understanding)]"
                             "(https://arxiv.org/abs/2009.03300), and [TruthfulQA: Measuring How Models Mimic Human Falsehoods](https://arxiv.org/abs/2109.07958)."
                         )
-                        
+
                         model_table_view = gr.Dataframe(
                             value=table_data,
                             headers=["Icon", "Model", "Params(B)", "Avg.", "ARC", "HellaSwag", "MMLU", "TruthfulQA"],
                             datatype=["markdown", "str", "number", "number", "number", "number", "number", "number"],
                             col_count=(8, "fixed"),
                             row_count=1,
-                            height=1000,
                             interactive=False,
                             wrap=True
                         )
-                    
+
                     with gr.Column() as recent_section:
                         gr.Markdown("## Recent Releases")
                         with gr.Row(elem_classes=["sub-container"]):
